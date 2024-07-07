@@ -133,8 +133,6 @@ function App() {
     try {
       if (terrainRef.current) sceneRef.current.remove(terrainRef.current);
 
-      const defaultRotation = 4; // Default rotation equivalent to clicking rotate button four times
-
       const geometryWidth = dsm.width / 10;
       const geometryHeight = dsm.height / 10;
       logOutput(`Creating geometry with dimensions: ${geometryWidth} x ${geometryHeight}`);
@@ -176,9 +174,9 @@ function App() {
         const textureIndex = i * 4;
         const rowIndex = Math.floor(i / dsm.width);
         const colIndex = i % dsm.width;
-        const rotatedIndex = (defaultRotation % 2 === 0)
-          ? (defaultRotation === 0 ? i : (dsm.width * dsm.height - 1 - i)) // 0° or 180°
-          : (defaultRotation === 1 ? (dsm.width * (rowIndex + 1) - 1 - colIndex) : (dsm.width * (dsm.height - 1 - rowIndex) + colIndex)); // 90° or 270°
+        const rotatedIndex = (rotation % 2 === 0)
+          ? (rotation === 0 ? i : (dsm.width * dsm.height - 1 - i)) // 0° or 180°
+          : (rotation === 1 ? (dsm.width * (rowIndex + 1) - 1 - colIndex) : (dsm.width * (dsm.height - 1 - rowIndex) + colIndex)); // 90° or 270°
 
         textureData[textureIndex] = imagery.data[0][rotatedIndex];     // R
         textureData[textureIndex + 1] = imagery.data[1][rotatedIndex]; // G
@@ -189,8 +187,6 @@ function App() {
       logOutput('Creating Three.js texture...');
       const texture = new THREE.DataTexture(textureData, dsm.width, dsm.height, THREE.RGBAFormat);
       texture.needsUpdate = true;
-      texture.magFilter = THREE.NearestFilter;
-      texture.minFilter = THREE.NearestFilter;
       logOutput('Texture created');
 
       logOutput('Creating material...');
